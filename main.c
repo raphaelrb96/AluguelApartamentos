@@ -19,6 +19,25 @@ locacao *pRaiz;
 
 //LOGICA PARA CRIACAO DO TRABALHO ARVORE BINARIA
 
+void buscar(locacao **locac, int n) {
+	locacao *temp = *locac;
+	if(temp == NULL) {
+		printf("Nenhum Resultado para a consulta\n");
+		return;
+	} else if(temp->num_locacao == n) {
+		printf("Numero de locacao %d - Numero de quarto %d - Locatario: %s ", temp->num_locacao, temp->num_quarto, temp->locatario);
+		return;
+	}
+	
+	if(temp->num_locacao > n) {
+		buscar(&temp->esquerda, n);
+		return;
+	} else {
+		buscar(&temp->direita, n);
+		return;
+	}
+}
+
 int maior(int a, int b){
 	if(a > b)
 		return a;
@@ -107,9 +126,9 @@ void exibirPosOrdem(locacao **pRaiz){
 
 void listaExclusao(locacao **raiz) {
 	if((*raiz) != NULL) {
-		exibirEmOrdem(&(*raiz)->esquerda);
+		listaExclusao(&(*raiz)->esquerda);
 		printf("\n(%d) > %s, quarto %d ", (*raiz)->num_locacao, (*raiz)->locatario, (*raiz)->num_quarto);
-		exibirEmOrdem(&(*raiz)->direita);
+		listaExclusao(&(*raiz)->direita);
 	}
 }
 
@@ -212,7 +231,6 @@ int removerDaArvore(locacao **pRaiz, int num_loc) {
 		
 	}
 	
-	return -1;
 }
 
 void interface() {
@@ -227,6 +245,7 @@ void interface() {
 		printf("(6) > Contar Nos\n");
 		printf("(7) > Contar Folhas\n");
 		printf("(8) > Altura da Arvore\n");
+		printf("(9) > Pesquisar\n");
 		printf("(0) > Sair\n");
 		printf("\nESCOLHA UMA OPCAO: \n");
 		scanf("%d", &opcao);
@@ -253,6 +272,7 @@ void interface() {
 					}
 				
 				} while (op != 0);
+				limparTela();
 				break;
 			case 3:
 				op = -1;
@@ -309,6 +329,19 @@ void interface() {
 					printf("\n\n(0) > Voltar\n\nESCOLHA UMA OPCAO: ");
 					scanf("%d", &op);
 					limparTela();
+				} while(op != 0);
+				break;
+			case 9:
+				op = -1;
+				do {
+					printf("\nPesquisar por Numero de Locacao: ");
+					printf("\n\n(0) > Voltar\n\nINSIRA UM NUMERO: ");
+					scanf("%d", &op);
+					limparTela();
+					if(op != 0) {
+						buscar(&pRaiz, op);
+					}
+					
 				} while(op != 0);
 				break;
 			case 0:
